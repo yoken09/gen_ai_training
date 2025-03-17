@@ -1,6 +1,7 @@
 package com.epam.training.gen.ai.client;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -13,12 +14,21 @@ import java.net.http.HttpResponse;
 @Slf4j
 @Component
 public class SemanticKernelClient {
+    @Value( "${client-semantic-kernel-key}" )
+    String clientKey;
+
+    @Value( "${client-semantic-kernel-endpoint}" )
+    String clientEndpoint;
+
+    @Value( "${client-semantic-kernel-deployment-name}" )
+    String clientDeploymentName;
+
     public String getResponse(String requestPayload)  {
         try {
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("https://ai-proxy.lab.epam.com/openai/deployments/dall-e-3/chat/completions?api-version=2023-12-01-preview"))
+                    .uri(new URI(clientEndpoint))
                     .headers("Content-Type", "application/json")
-                    .header("Api-Key", "dial-dafr65t96qoedn7ln9q0wuk0omd")
+                    .header("Api-Key", clientKey)
                     .POST(HttpRequest.BodyPublishers.ofString(requestPayload))
                     .build();
 
